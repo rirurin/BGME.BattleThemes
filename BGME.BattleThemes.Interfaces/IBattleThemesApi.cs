@@ -1,5 +1,7 @@
 ﻿namespace BGME.BattleThemes.Interfaces;
 
+public record ModSong(string ModOwner, string Name, int BgmId);
+
 public interface IBattleThemesApi
 {
     /// <summary>
@@ -13,4 +15,11 @@ public interface IBattleThemesApi
     /// </summary>
     /// <param name="path">Theme path.</param>
     void RemovePath(string path);
+
+    /// <summary>
+    /// Add a listener that triggers if a battle theme is registered belonging to the target mod.
+    /// </summary>
+    /// <param name="modId">Mod ID that the song will belong to.</param>
+    /// <param name="callback">Callback to execute.</param>
+    void OnMusicRegistered(string modId, Action<ModSong> callback);
 }
