@@ -9,6 +9,7 @@ internal class MusicRegistry(IRyoApi ryo, Game game, Config config)
 
     private readonly string[] _supportedExts = [".hca"];
     private readonly List<ModSong> _music = [];
+    internal readonly Dictionary<string, List<ModSong>> _musicByModId = [];
 
     internal Dictionary<string, Action<ModSong>> _listeners = new();
 
@@ -16,6 +17,7 @@ internal class MusicRegistry(IRyoApi ryo, Game game, Config config)
     {
         var musicDir = Path.Join(modDir, "battle-themes", "music");
         if (!Directory.Exists(musicDir)) return;
+        _musicByModId.Add(modId, []);
 
         foreach (var file in Directory.EnumerateFiles(musicDir, "*", SearchOption.AllDirectories))
         {
@@ -27,6 +29,7 @@ internal class MusicRegistry(IRyoApi ryo, Game game, Config config)
 
             var NewSong = new ModSong(modId, name, bgmId);
             _music.Add(NewSong);
+            _musicByModId[modId].Add(NewSong);
             if (_listeners.TryGetValue(modId, out var Callback))
             {
                 Callback(NewSong);
